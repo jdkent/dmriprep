@@ -275,7 +275,12 @@ jobs:
           name: Clean working directory
           when: on_success
           command: |
-            sudo rm -rf /tmp/THP002/work
+            # sudo rm -rf /tmp/THP002/work
+            sudo chown $(id -un):$(id -gn) -R /tmp/THP002
+            find /tmp/THP002/work \( -name "*.nii.gz" -or -name "*.nii" -or "*.gii" -or "*.h5" \) \
+                -exec sh -c 'rm -f {}; touch {}' \;
+            find /tmp/THP002/work_partial \( -name "*.nii.gz" -or -name "*.nii" -or "*.gii" -or "*.h5" \) \
+                -exec sh -c 'rm -f {}; touch {}' \;
       - run:
           name: Clean working directory
           when: on_fail
